@@ -16,6 +16,10 @@
       {
         "command": "surfer.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "surfer.start",
+        "title": "Start Surfer"
       }
     ]
   },
