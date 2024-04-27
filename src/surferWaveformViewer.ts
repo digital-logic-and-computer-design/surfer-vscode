@@ -14,7 +14,7 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 		private readonly context: vscode.ExtensionContext
 	) { }
 
-	// Called when the Waveform Viewer is opened.
+	// Called when the Waveform Viewer is opened
 	public async resolveCustomTextEditor(
 		document: vscode.TextDocument,
 		webviewPanel: vscode.WebviewPanel,
@@ -26,54 +26,40 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 			enableScripts: true,
 		};
 		// This will probably need to take a document as an arguement
-		webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview);
+		webviewPanel.webview.html = await this.getHtmlForWebview(webviewPanel.webview);
 	}
 
 	// Get the static html used for the editor webviews.
-	private getHtmlForWebview(webview: vscode.Webview): string {
-		// Local path to script and css for the webview
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'media', 'catScratch.js'));
+	private async getHtmlForWebview(webview: vscode.Webview): Promise<string> {
 
-		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'media', 'reset.css'));
+		// Get path to resource on disk
+		const indexPath = vscode.Uri.joinPath(this.context.extensionUri, 'surfer', 'index.html');
+		const contents = await vscode.workspace.fs.readFile(indexPath)
 
-		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'media', 'vscode.css'));
+		// Get WebView URIs
+		const manifestJSONUriString = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'surfer', 'manifest.json')).toString();
 
-		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(
-			this.context.extensionUri, 'media', 'catScratch.css'));
+		const surferBGWASMUriString = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'surfer', 'surfer_bg.wasm')).toString();
 
+		const surferJSUriString = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'surfer', 'surfer.js')).toString();
 
-		return /* html */`
-			<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
+		const swJSUriString = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'surfer', 'sw.js')).toString();
 
-				<!--
-				Use a content security policy to only allow loading images from https or from our extension directory,
-				and only allow scripts that have a specific nonce (actually, I removed this last part here).
-				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource}; style-src ${webview.cspSource};">
+		// Replace local paths with paths derived from WebView URIs
+		let html = new TextDecoder().decode(contents);
+		html = this.replaceAll(html, "./manifest.json", manifestJSONUriString);
+		html = this.replaceAll(html, "./surfer_bg.wasm", surferBGWASMUriString);
+		html = this.replaceAll(html, "./surfer.js", surferJSUriString);
+		html = this.replaceAll(html, "./sw.js", swJSUriString)
 
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		return html;
+	}
 
-				<link href="${styleResetUri}" rel="stylesheet" />
-				<link href="${styleVSCodeUri}" rel="stylesheet" />
-				<link href="${styleMainUri}" rel="stylesheet" />
-
-				<title>Cat Scratch</title>
-			</head>
-			<body>
-				<div class="notes">
-					<div class="add-button">
-						<button>Scratch!</button>
-					</div>
-				</div>
-
-				<script src="${scriptUri}"></script>
-			</body>
-			</html>`;
+	private replaceAll(input: string, search: string, replacement: string): string {
+		return input.replace(new RegExp(search, 'g'), replacement);
 	}
 }

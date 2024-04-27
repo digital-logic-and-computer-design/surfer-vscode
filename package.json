@@ -12,12 +12,6 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "surfer.start",
-        "title": "Start Surfer"
-      }
-    ],
     "customEditors": [
       {
         "viewType": "surfer.waveformViewer",
