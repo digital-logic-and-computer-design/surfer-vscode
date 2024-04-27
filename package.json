@@ -14,12 +14,20 @@
   "contributes": {
     "commands": [
       {
-        "command": "surfer.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "surfer.start",
         "title": "Start Surfer"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "surfer.waveformViewer",
+        "displayName": "Surfer Waveform Viewer",
+        "selector": [
+          {
+            "filenamePattern": "*.vcd"
+          }
+        ],
+        "priority": "default"
       }
     ]
   },
