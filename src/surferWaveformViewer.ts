@@ -25,14 +25,15 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 		webviewPanel.webview.options = {
 			enableScripts: true,
 		};
-		// This will probably need to take a document as an arguement
-		webviewPanel.webview.html = await this.getHtmlForWebview(webviewPanel.webview);
+
+		// Fill the Webview with HTML
+		webviewPanel.webview.html = await this.getHtmlForWebview(webviewPanel.webview, document);
 	}
 
 	// Get the static html used for the editor webviews.
-	private async getHtmlForWebview(webview: vscode.Webview): Promise<string> {
+	private async getHtmlForWebview(webview: vscode.Webview, document: vscode.TextDocument): Promise<string> {
 
-		// Get path to resource on disk
+		// Read index.html from disk
 		const indexPath = vscode.Uri.joinPath(this.context.extensionUri, 'surfer', 'index.html');
 		const contents = await vscode.workspace.fs.readFile(indexPath)
 
@@ -55,6 +56,11 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 		html = this.replaceAll(html, "./surfer_bg.wasm", surferBGWASMUriString);
 		html = this.replaceAll(html, "./surfer.js", surferJSUriString);
 		html = this.replaceAll(html, "./sw.js", swJSUriString)
+
+		// Get the URI of the document that the user has selected, set window.query_string to it
+		const documentUri = webview.asWebviewUri(document.uri).toString();
+		const query_string = `?load_url=${documentUri}&amp;startup_commands=toggle_menu`;
+		html = this.replaceAll(html, "window.query_string = null;", `window.query_string = "${query_string}"`);
 
 		return html;
 	}

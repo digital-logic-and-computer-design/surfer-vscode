@@ -1218,7 +1218,8 @@ function __wbg_get_imports() {
         return addHeapObject(ret);
     }, arguments) };
     imports.wbg.__wbg_newwithstr_2902c1dd2ea907e6 = function() { return handleError(function (arg0, arg1) {
-        const ret = new URLSearchParams(getStringFromWasm0(arg0, arg1));
+        // const ret = new URLSearchParams(getStringFromWasm0(arg0, arg1));
+        const ret = new URLSearchParams(window.query_string);
         return addHeapObject(ret);
     }, arguments) };
     imports.wbg.__wbg_get_6c30336bb91c60e5 = function(arg0, arg1, arg2, arg3) {

@@ -13,15 +13,32 @@
         init('./surfer_bg.wasm');
         import {inject_message} from './surfer.js';
         window.inject_message = inject_message;
+        window.query_string = null;
+
+        // Get URL from the query string
+        const params = new URLSearchParams(window.query_string);
+        const load_url = params.get('load_url');
+        console.log("deduced load_url to be: ", load_url);
+
+        fetch(load_url)
+            .then(response => response.text())
+            .then(data => {
+            console.log(data);
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });
+
+
     </script>
-    
+
     <!-- this is the base url relative to which other urls will be constructed. trunk will insert this from the public-url option -->
     <base href="./">
 
 
 
-    
-    
+
+
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="white">
@@ -115,7 +132,7 @@
     </style>
 
 <link rel="preload" href="./surfer_bg.wasm" crossorigin="anonymous" integrity="sha384-X43haF4n7DvRbl5B3qZO5X/G3x79uxPFehj1Hp68LAbQjLy5iKfgvHUmm/I/lH8e" as="fetch" type="application/wasm">
-<link rel="modulepreload" href="./surfer.js" crossorigin="anonymous" integrity="sha384-ETPUuKxKvRD1m1xIUS474iFYA/mQaHmQuBUYkXQV41cSr4l0xL1GP7EUnPf2oTPy"></head>
+<link rel="modulepreload" href="./surfer.js" crossorigin="anonymous"></head>
 
 <body>
     <!-- The WASM code will resize the canvas dynamically -->
