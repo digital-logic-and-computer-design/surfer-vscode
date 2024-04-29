@@ -21,12 +21,20 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 		_token: vscode.CancellationToken
 	): Promise<void> {
 
-		// Setup initial content for the webview
+		// Add the folder that the document lives in as a localResourceRoot
+		const uri = document.uri.toString();
+		const pathComponents = uri.split('/');
+		const fileName = pathComponents.pop();
+		const dirPath = pathComponents.join('/');
+
 		webviewPanel.webview.options = {
 			enableScripts: true,
+			localResourceRoots: [
+				vscode.Uri.joinPath(this.context.extensionUri, 'surfer'),
+				vscode.Uri.parse(dirPath, true)
+			]
 		};
 
-		// Fill the Webview with HTML
 		webviewPanel.webview.html = await this.getHtmlForWebview(webviewPanel.webview, document);
 	}
 
