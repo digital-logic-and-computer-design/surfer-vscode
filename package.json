@@ -3,13 +3,18 @@
   "displayName": "surfer",
   "description": "An Extensible and Snappy Waveform Viewer",
   "version": "0.1.0",
-  "license": ,
+  "license": "EUPL-1.2",
   "engines": {
     "vscode": "^1.88.0"
   },
   "categories": [
     "Visualization"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/surfer-project/surfer.git"
+  },
+  "publisher": "surfer-project",
   "readme": "./README.md",
 	"icon": "./icon.png",
   "activationEvents": [],
