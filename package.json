@@ -2,13 +2,16 @@
   "name": "surfer",
   "displayName": "surfer",
   "description": "An Extensible and Snappy Waveform Viewer",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "license": ,
   "engines": {
     "vscode": "^1.88.0"
   },
   "categories": [
-    "Other"
+    "Visualization"
   ],
+  "readme": "./README.md",
+	"icon": "./icon.png",
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
