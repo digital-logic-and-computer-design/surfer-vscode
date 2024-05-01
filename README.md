@@ -6,7 +6,7 @@ This extension allows you to use the [Surfer](https://surfer-project.org/) wavef
 
 Just install the extension and open a `.vcd` file!
 
-![](./screenshot.png)
+![](https://gitlab.com/surfer-project/vscode-extension/-/raw/main/screenshot.png)
 
 This extension is a port of the version of Surfer that runs in a web browser, which you can try [here](https://app.surfer-project.org/). As this extension also runs Surfer in a browser, it is subject to the same restrictions as the online version - some features are missing, and it won't be as fast as the desktop version due to a lack of multithreading support.
 
