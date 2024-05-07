@@ -1,14 +1,22 @@
 {
   "name": "surfer",
   "displayName": "surfer",
-  "description": "An Extensible and Snappy Waveform Viewer",
-  "version": "0.1.0",
+  "description": "An Extensible and Snappy Waveform Viewer that supports VCD, FST, and GHW files",
+  "version": "0.1.2",
   "license": "EUPL-1.2",
   "engines": {
     "vscode": "^1.88.0"
   },
   "categories": [
     "Visualization"
+  ],
+  "keywords": [
+    "VCD",
+    "FST",
+    "GHW",
+    "FPGA",
+    "ASIC",
+    "waveform"
   ],
   "repository": {
     "type": "git",
