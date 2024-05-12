@@ -4,7 +4,15 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 
 	public static register(context: vscode.ExtensionContext): vscode.Disposable {
 		const provider = new SurferWaveformViewerEditorProvider(context);
-		const providerRegistration = vscode.window.registerCustomEditorProvider(SurferWaveformViewerEditorProvider.viewType, provider);
+		const providerRegistration = vscode.window.registerCustomEditorProvider(
+			SurferWaveformViewerEditorProvider.viewType,
+			provider,
+			{
+				webviewOptions: {
+					retainContextWhenHidden: true,
+				}
+			});
+
 		return providerRegistration;
 	}
 
