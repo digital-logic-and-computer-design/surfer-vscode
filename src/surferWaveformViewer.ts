@@ -23,9 +23,9 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 
 	public static async refresh() {
 		console.log(SurferWaveformViewerEditorProvider.webViewPanel);
-		SurferWaveformViewerEditorProvider.webViewPanel.webview.html = "";
-	    SurferWaveformViewerEditorProvider.webViewPanel.webview.html = await SurferWaveformViewerEditorProvider.instance.getHtmlForWebview(SurferWaveformViewerEditorProvider.webViewPanel.webview, SurferWaveformViewerEditorProvider.document);
-		//	  	await SurferWaveformViewerEditorProvider.webView.webview.postMessage("refresh");
+		// SurferWaveformViewerEditorProvider.webViewPanel.webview.html = "";
+	    // SurferWaveformViewerEditorProvider.webViewPanel.webview.html = await SurferWaveformViewerEditorProvider.instance.getHtmlForWebview(SurferWaveformViewerEditorProvider.webViewPanel.webview, SurferWaveformViewerEditorProvider.document);
+		await SurferWaveformViewerEditorProvider.webViewPanel.webview.postMessage("refresh");
 	}
 
 	constructor(
@@ -42,6 +42,10 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 		SurferWaveformViewerEditorProvider.webViewPanel = webviewPanel;
 		SurferWaveformViewerEditorProvider.document = document;
 		SurferWaveformViewerEditorProvider.instance = this;
+		webviewPanel.webview.onDidReceiveMessage(
+			message => console.log("in:" + message), undefined, this.context.subscriptions	
+		)
+
 		// Add the folder that the document lives in as a localResourceRoot
 		const uri = document.uri.toString();
 		const pathComponents = uri.split('/');

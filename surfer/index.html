@@ -15,6 +15,19 @@
         window.inject_message = inject_message;
         window.query_string = null;
 
+        // window.onload = () => {
+        //                 vscode.postMessage({
+        //                     type: 'onData',
+        //                     value: ${JSON.stringify(initialData)}
+        //                 });};
+        // inject_message WORKS!   Proof:
+//        setInterval(()=>{inject_message(JSON.stringify({ReloadWaveform:true}))}, 2000);
+        window.addEventListener("message", (event) => {
+            if(event.data == "refresh") {
+                inject_message(JSON.stringify({ReloadWaveform:true}));
+            }
+        });
+
         // Get URL from the query string
         const params = new URLSearchParams(window.query_string);
         const load_url = params.get('load_url');
@@ -138,7 +151,6 @@
     <!-- The WASM code will resize the canvas dynamically -->
     <!-- the id is hardcoded in main.rs . so, make sure both match. -->
     <canvas id="the_canvas_id"></canvas>
-
     <!--Register Service Worker. this will cache the wasm / js scripts for offline use (for PWA functionality). -->
     <!-- Force refresh (Ctrl + F5) to load the latest files instead of cached files  -->
     <script>
