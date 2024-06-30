@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-
 export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEditorProvider {
 
 	public static register(context: vscode.ExtensionContext): vscode.Disposable {
+		console.log("Registering SurferWaveformViewerEditorProvider")
 		const provider = new SurferWaveformViewerEditorProvider(context);
 		const providerRegistration = vscode.window.registerCustomEditorProvider(
 			SurferWaveformViewerEditorProvider.viewType,
@@ -17,6 +17,16 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 	}
 
 	private static readonly viewType = 'surfer.waveformViewer';
+	private static webViewPanel: vscode.WebviewPanel;
+	private static document: vscode.TextDocument;
+	private static instance: SurferWaveformViewerEditorProvider;
+
+	public static async refresh() {
+		console.log(SurferWaveformViewerEditorProvider.webViewPanel);
+		SurferWaveformViewerEditorProvider.webViewPanel.webview.html = "";
+	    SurferWaveformViewerEditorProvider.webViewPanel.webview.html = await SurferWaveformViewerEditorProvider.instance.getHtmlForWebview(SurferWaveformViewerEditorProvider.webViewPanel.webview, SurferWaveformViewerEditorProvider.document);
+		//	  	await SurferWaveformViewerEditorProvider.webView.webview.postMessage("refresh");
+	}
 
 	constructor(
 		private readonly context: vscode.ExtensionContext
@@ -28,7 +38,10 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 		webviewPanel: vscode.WebviewPanel,
 		_token: vscode.CancellationToken
 	): Promise<void> {
-
+		console.log("Resolving custom text editor")
+		SurferWaveformViewerEditorProvider.webViewPanel = webviewPanel;
+		SurferWaveformViewerEditorProvider.document = document;
+		SurferWaveformViewerEditorProvider.instance = this;
 		// Add the folder that the document lives in as a localResourceRoot
 		const uri = document.uri.toString();
 		const pathComponents = uri.split('/');
@@ -48,7 +61,7 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 
 	// Get the static html used for the editor webviews.
 	private async getHtmlForWebview(webview: vscode.Webview, document: vscode.TextDocument): Promise<string> {
-
+		console.log("Getting html for webview")
 		// Read index.html from disk
 		const indexPath = vscode.Uri.joinPath(this.context.extensionUri, 'surfer', 'index.html');
 		const contents = await vscode.workspace.fs.readFile(indexPath)
