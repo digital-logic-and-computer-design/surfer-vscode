@@ -28,17 +28,19 @@
         const params = new URLSearchParams(window.query_string);
         const load_url = params.get('load_url');
         console.log("deduced load_url to be: ", load_url);
-
         fetch(load_url)
             .then(response => response.text())
             .then(data => {
-            console.log(data);
-            })
+                console.log(data);})
             .catch(error => {
-            console.error('Error:', error);
+                console.error('Error:', error);
             });
 
-
+            setTimeout(() => {
+        inject_message(JSON.stringify("ToggleMenu"));  // Works
+        let canvas = document.getElementById("the_canvas_id");
+                canvas.dispatchEvent(new MouseEvent('mousemove', {clientX: 0, clientY: 0}));
+            }, 100);
     </script>
 
     <!-- this is the base url relative to which other urls will be constructed. trunk will insert this from the public-url option -->

@@ -18,9 +18,9 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 	private static readonly viewType = 'surfer.waveformViewer';
 	private static webViewPanel: vscode.WebviewPanel;
 
-	public static async refresh() {
-		await SurferWaveformViewerEditorProvider.webViewPanel.webview.postMessage("refresh");
-	}
+	// public static async refresh() {
+	// 	await SurferWaveformViewerEditorProvider.webViewPanel.webview.postMessage("refresh");
+	// }
 
 	constructor(
 		private readonly context: vscode.ExtensionContext
@@ -39,6 +39,11 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 		const pathComponents = uri.split('/');
 		const fileName = pathComponents.pop();
 		const dirPath = pathComponents.join('/');
+
+		// Monitor for changes
+		vscode.workspace.createFileSystemWatcher(document.fileName).onDidChange(() => {
+			SurferWaveformViewerEditorProvider.webViewPanel.webview.postMessage("refresh");
+		});
 
 		webviewPanel.webview.options = {
 			enableScripts: true,
