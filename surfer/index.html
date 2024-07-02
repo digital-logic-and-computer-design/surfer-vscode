@@ -36,11 +36,12 @@
                 console.error('Error:', error);
             });
 
-            setTimeout(() => {
-        inject_message(JSON.stringify("ToggleMenu"));  // Works
-        let canvas = document.getElementById("the_canvas_id");
-                canvas.dispatchEvent(new MouseEvent('mousemove', {clientX: 0, clientY: 0}));
-            }, 100);
+        setTimeout(() => {
+            // Turn off the file menu after load
+            inject_message(JSON.stringify("ToggleMenu"));  // Works
+            let canvas = document.getElementById("the_canvas_id");
+            canvas.dispatchEvent(new MouseEvent('mousemove', {clientX: 0, clientY: 0}));
+        }, 100);
     </script>
 
     <!-- this is the base url relative to which other urls will be constructed. trunk will insert this from the public-url option -->

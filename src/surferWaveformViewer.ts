@@ -18,10 +18,6 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 	private static readonly viewType = 'surfer.waveformViewer';
 	private static webViewPanel: vscode.WebviewPanel;
 
-	// public static async refresh() {
-	// 	await SurferWaveformViewerEditorProvider.webViewPanel.webview.postMessage("refresh");
-	// }
-
 	constructor(
 		private readonly context: vscode.ExtensionContext
 	) { }
