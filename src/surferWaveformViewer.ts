@@ -17,6 +17,7 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 
 	private static readonly viewType = 'surfer.waveformViewer';
 	private static webViewPanel: vscode.WebviewPanel;
+	private static watcher: vscode.FileSystemWatcher;
 
 	constructor(
 		private readonly context: vscode.ExtensionContext
@@ -37,7 +38,12 @@ export class SurferWaveformViewerEditorProvider implements vscode.CustomTextEdit
 		const dirPath = pathComponents.join('/');
 
 		// Monitor for changes
-		vscode.workspace.createFileSystemWatcher(document.fileName).onDidChange(() => {
+		// Remove any prior watchers & create new one for current document
+		if(SurferWaveformViewerEditorProvider.watcher) {
+			SurferWaveformViewerEditorProvider.watcher.dispose();
+		}
+		SurferWaveformViewerEditorProvider.watcher = vscode.workspace.createFileSystemWatcher(document.fileName);
+		SurferWaveformViewerEditorProvider.watcher.onDidChange(() => {
 			SurferWaveformViewerEditorProvider.webViewPanel.webview.postMessage("refresh");
 		});
 
